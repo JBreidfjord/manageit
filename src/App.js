@@ -7,12 +7,14 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
 import Navbar from "./components/Navbar";
 import Project from "./pages/project/Project";
+import Sidebar from "./components/Sidebar";
 import Signup from "./pages/signup/Signup";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Sidebar />
         <div className="container">
           <Navbar />
           <Routes>
