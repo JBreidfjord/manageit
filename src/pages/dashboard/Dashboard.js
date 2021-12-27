@@ -1,6 +1,6 @@
 import "./Dashboard.css";
 
-import ProjectList from "../../components/ProjectList";
+import ProjectList from "./ProjectList";
 import { useCollection } from "../../hooks/useCollection";
 
 export default function Dashboard() {

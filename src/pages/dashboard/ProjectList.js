@@ -1,6 +1,6 @@
 import "./ProjectList.css";
 
-import Avatar from "./Avatar";
+import Avatar from "../../components/Avatar";
 import { Link } from "react-router-dom";
 
 export default function ProjectList({ projects }) {
