@@ -82,12 +82,7 @@ export default function Create() {
 
         <label>
           <span>Details:</span>
-          <textarea
-            onChange={(e) => setDetails(e.target.value)}
-            value={details}
-            style={{ resize: "none" }}
-            required
-          />
+          <textarea onChange={(e) => setDetails(e.target.value)} value={details} required />
         </label>
 
         <label>
