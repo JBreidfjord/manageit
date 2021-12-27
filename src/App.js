@@ -6,6 +6,7 @@ import Create from "./pages/create/Create";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
 import Navbar from "./components/Navbar";
+import OnlineUsers from "./components/OnlineUsers";
 import Project from "./pages/project/Project";
 import Sidebar from "./components/Sidebar";
 import Signup from "./pages/signup/Signup";
@@ -29,6 +30,7 @@ function App() {
               <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} />
             </Routes>
           </div>
+          {user && <OnlineUsers />}
         </BrowserRouter>
       )}
     </div>
