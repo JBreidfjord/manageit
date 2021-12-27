@@ -1,32 +1,35 @@
 import "./Signup.css";
 
+import { useSignup } from "../../hooks/useSignup";
 import { useState } from "react";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [thumbnail, setThumbnail] = useState(null);
-  const [thumbnailError, setThumbnailError] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+  const [avatarError, setAvatarError] = useState(null);
+  const { signup, isPending, error } = useSignup();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    signup(displayName, email, password, avatar);
   };
 
   const handleFileChange = (e) => {
-    setThumbnail(null);
+    setAvatar(null);
 
     let selected = e.target.files[0];
 
     if (!selected) {
-      setThumbnailError("Please select a file");
+      setAvatarError("Please select a file");
     } else if (!selected.type.includes("image")) {
-      setThumbnailError("File must be an image");
+      setAvatarError("File must be an image");
     } else if (selected.size > 1000000) {
-      setThumbnailError("File size exceeds 1MB");
+      setAvatarError("File size exceeds 1MB");
     } else {
-      setThumbnailError(null);
-      setThumbnail(selected);
+      setAvatarError(null);
+      setAvatar(selected);
     }
   };
 
@@ -39,7 +42,7 @@ export default function Signup() {
       </label>
 
       <label>
-        <span>Name:</span>
+        <span>Display Name:</span>
         <input
           type="text"
           onChange={(e) => setDisplayName(e.target.value)}
@@ -61,9 +64,15 @@ export default function Signup() {
       <label>
         <span>Avatar:</span>
         <input type="file" onChange={handleFileChange} required />
-        {thumbnailError && <div className="error">{thumbnailError}</div>}
+        {avatarError && <div className="error">{avatarError}</div>}
       </label>
-      <button className="btn">Submit</button>
+      {!isPending && <button className="btn">Submit</button>}
+      {isPending && (
+        <button className="btn" disabled>
+          Loading
+        </button>
+      )}
+      {error && <div className="error">{error}</div>}
     </form>
   );
 }

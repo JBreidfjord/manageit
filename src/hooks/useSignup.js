@@ -1,6 +1,6 @@
+import { auth, db, storage } from "../firebase/config";
 import { useEffect, useState } from "react";
 
-import { auth } from "../firebase/config";
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
@@ -9,7 +9,7 @@ export const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const signup = async (displayName, email, password) => {
+  const signup = async (displayName, email, password, avatar) => {
     setIsPending(true);
     setError(null);
 
@@ -19,7 +19,14 @@ export const useSignup = () => {
         throw new Error("Could not complete signup");
       }
 
-      await res.user.updateProfile({ displayName });
+      const uploadPath = `avatars/${res.user.uid}/${avatar.name}`;
+      const photo = await storage.ref(uploadPath).put(avatar);
+      const photoURL = await photo.ref.getDownloadURL();
+
+      await res.user.updateProfile({ displayName, photoURL });
+
+      await db.collection("users").doc(res.user.uid).set({ online: true, displayName, photoURL });
+
       dispatch({ type: "LOGIN", payload: res.user });
 
       if (!isCancelled) {
