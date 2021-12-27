@@ -10,10 +10,10 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
-  { value: "development", label: "Development" },
-  { value: "design", label: "Design" },
-  { value: "sales", label: "Sales" },
-  { value: "marketing", label: "Marketing" },
+  { value: "Development", label: "Development" },
+  { value: "Design", label: "Design" },
+  { value: "Marketing", label: "Marketing" },
+  { value: "Sales", label: "Sales" },
 ];
 
 export default function Create() {
