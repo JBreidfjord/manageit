@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 import { useState } from "react";
 
@@ -14,6 +15,10 @@ export default function Login() {
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
       <h2>Login</h2>
+      <small>
+        Need an account? <Link to="/signup">Click here to sign up instead</Link>
+      </small>
+
       <label>
         <span>Email:</span>
         <input type="email" onChange={(e) => setEmail(e.target.value)} value={email} required />
