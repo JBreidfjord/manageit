@@ -2,8 +2,11 @@ import "./Navbar.css";
 
 import Logo from "../assets/logo.svg";
 import { NavLink } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
 
 export default function Navbar() {
+  const { logout } = useLogout();
+
   return (
     <div className="navbar">
       <ul>
@@ -18,7 +21,9 @@ export default function Navbar() {
           <NavLink to="/signup">Sign Up</NavLink>
         </li>
         <li>
-          <button className="btn">Logout</button>
+          <button className="btn" onClick={logout}>
+            Logout
+          </button>
         </li>
       </ul>
     </div>
