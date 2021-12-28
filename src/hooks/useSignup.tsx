@@ -9,30 +9,30 @@ export const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const signup = async (displayName, email, password, avatar) => {
+  const signup = async (displayName: string, email: string, password: string, avatar: File) => {
     setIsPending(true);
     setError(null);
 
     try {
       const res = await auth.createUserWithEmailAndPassword(email, password);
-      if (!res) {
+      if (!res.user) {
         throw new Error("Could not complete signup");
+      } else {
+        const uploadPath = `avatars/${res.user.uid}/${avatar.name}`;
+        const photo = await storage.ref(uploadPath).put(avatar);
+        const photoURL = await photo.ref.getDownloadURL();
+
+        await res.user.updateProfile({ displayName, photoURL });
+
+        await db.collection("users").doc(res.user.uid).set({ online: true, displayName, photoURL });
+
+        dispatch({ type: "LOGIN", payload: res.user });
+
+        if (!isCancelled) {
+          setIsPending(false);
+        }
       }
-
-      const uploadPath = `avatars/${res.user.uid}/${avatar.name}`;
-      const photo = await storage.ref(uploadPath).put(avatar);
-      const photoURL = await photo.ref.getDownloadURL();
-
-      await res.user.updateProfile({ displayName, photoURL });
-
-      await db.collection("users").doc(res.user.uid).set({ online: true, displayName, photoURL });
-
-      dispatch({ type: "LOGIN", payload: res.user });
-
-      if (!isCancelled) {
-        setIsPending(false);
-      }
-    } catch (err) {
+    } catch (err: any) {
       if (!isCancelled) {
         setError(err.message);
         setIsPending(false);

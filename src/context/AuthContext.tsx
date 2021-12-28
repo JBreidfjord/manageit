@@ -2,9 +2,35 @@ import { createContext, useEffect, useReducer } from "react";
 
 import { auth } from "../firebase/config";
 
-export const AuthContext = createContext();
+interface User {
+  uid: string;
+  displayName: string;
+  photoURL: string;
+}
 
-export const authReducer = (state, action) => {
+export interface AuthContextType {
+  user: User;
+  authIsReady: boolean;
+  dispatch: React.Dispatch<any>;
+}
+
+interface State {
+  user: User;
+  authIsReady: boolean;
+}
+
+interface Action {
+  type: string;
+  payload?: any;
+}
+
+type Props = {
+  children: React.ReactNode;
+};
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const authReducer = (state: State, action: Action) => {
   switch (action.type) {
     case "LOGIN":
       return { ...state, user: action.payload };
@@ -17,7 +43,7 @@ export const authReducer = (state, action) => {
   }
 };
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
     authIsReady: false,

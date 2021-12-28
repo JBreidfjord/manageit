@@ -1,6 +1,11 @@
 const filterList = ["All", "Assigned to Me", "Development", "Design", "Marketing", "Sales"];
 
-export default function ProjectFilter({ currentFilter, changeFilter }) {
+type Props = {
+  currentFilter: string;
+  changeFilter: (filter: string) => void;
+};
+
+export default function ProjectFilter({ currentFilter, changeFilter }: Props) {
   return (
     <div className="project-filter">
       <nav>
@@ -8,7 +13,7 @@ export default function ProjectFilter({ currentFilter, changeFilter }) {
           <button
             key={filter}
             onClick={() => changeFilter(filter)}
-            className={currentFilter === filter ? "active" : null}
+            className={currentFilter === filter ? "active" : ""}
           >
             {filter}
           </button>

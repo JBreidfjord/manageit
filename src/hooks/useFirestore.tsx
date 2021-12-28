@@ -1,73 +1,85 @@
 import { db, timestamp } from "../firebase/config";
 import { useEffect, useReducer, useState } from "react";
 
-let initialState = {
-  document: null,
+interface State {
+  document: {};
+  isPending: boolean;
+  error: string;
+  success: boolean;
+}
+
+interface Action {
+  type: string;
+  payload?: any;
+}
+
+let initialState: State = {
+  document: {},
   isPending: false,
-  error: null,
-  success: null,
+  error: "",
+  success: false,
 };
 
-const firestoreReducer = (state, action) => {
+const firestoreReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "PENDING":
-      return { isPending: true, document: null, success: null, error: null };
+      return { isPending: true, document: {}, success: false, error: "" };
     case "ADD_DOC":
-      return { document: action.payload, isPending: false, error: null, success: true };
+      return { document: action.payload, isPending: false, error: "", success: true };
     case "DEL_DOC":
-      return { document: null, isPending: false, error: null, success: true };
+      return { document: {}, isPending: false, error: "", success: true };
     case "UPDATE_DOC":
-      return { document: action.payload, isPending: false, error: null, success: true };
+      return { document: action.payload, isPending: false, error: "", success: true };
     case "ERROR":
-      return { error: action.payload, isPending: false, success: false, document: null };
+      return { error: action.payload, isPending: false, success: false, document: {} };
     default:
       return state;
   }
 };
 
-export const useFirestore = (collection) => {
+export const useFirestore = (collection: string) => {
   const [response, dispatch] = useReducer(firestoreReducer, initialState);
   const [isCancelled, setIsCancelled] = useState(false);
 
   const ref = db.collection(collection);
 
-  const dispatchIfNotCancelled = (action) => {
+  const dispatchIfNotCancelled = (action: Action) => {
     if (!isCancelled) {
       dispatch(action);
     }
   };
 
-  const addDocument = async (doc) => {
+  const addDocument = async (doc: {}) => {
     dispatchIfNotCancelled({ type: "PENDING" });
 
     try {
       const createdAt = timestamp.fromDate(new Date());
       const addedDocument = await ref.add({ ...doc, createdAt });
       dispatchIfNotCancelled({ type: "ADD_DOC", payload: addedDocument });
-    } catch (err) {
+    } catch (err: any) {
       dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };
 
-  const deleteDocument = async (id) => {
+  const deleteDocument = async (id: string) => {
     dispatchIfNotCancelled({ type: "PENDING" });
 
     try {
       await ref.doc(id).delete();
       dispatchIfNotCancelled({ type: "DEL_DOC" });
-    } catch (err) {
+    } catch (err: any) {
       dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };
 
-  const updateDocument = async (id, updates) => {
+  const updateDocument = async (id: string, updates: {}) => {
     dispatchIfNotCancelled({ type: "PENDING" });
 
     try {
       await ref.doc(id).update(updates);
       const updatedDocument = await ref.doc(id).get();
       dispatchIfNotCancelled({ type: "UPDATE_DOC", payload: updatedDocument });
-    } catch (err) {
+    } catch (err: any) {
       dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };

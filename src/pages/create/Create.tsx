@@ -8,6 +8,16 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useNavigate } from "react-router-dom";
+import { CreateProject, User } from "../../types";
+
+interface AssignedUser {
+  value: User;
+}
+
+interface UserOption {
+  value: User;
+  label: string;
+}
 
 const categories = [
   { value: "Development", label: "Development" },
@@ -21,17 +31,17 @@ export default function Create() {
   const [details, setDetails] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [category, setCategory] = useState("");
-  const [assignedUsers, setAssignedUsers] = useState([]);
+  const [assignedUsers, setAssignedUsers] = useState([] as AssignedUser[]);
   const [formError, setFormError] = useState("");
-  const [userOptions, setUserOptions] = useState([]);
+  const [userOptions, setUserOptions] = useState([] as UserOption[]);
 
   const navigate = useNavigate();
 
-  const { documents: users } = useCollection("users");
+  const { documents: users } = useCollection<User>("users");
   const { user } = useAuthContext();
   const { addDocument, response } = useFirestore("projects");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormError("");
 
@@ -40,12 +50,12 @@ export default function Create() {
     } else if (assignedUsers.length === 0) {
       setFormError("Please assign at least 1 user");
     } else {
-      const assignedUsersList = assignedUsers.map((assignedUser) => ({
+      const assignedUsersList = assignedUsers.map((assignedUser: AssignedUser) => ({
         displayName: assignedUser.value.displayName,
         photoURL: assignedUser.value.photoURL,
         id: assignedUser.value.id,
       }));
-      const project = {
+      const project: CreateProject = {
         name,
         details,
         category: category,
@@ -97,14 +107,17 @@ export default function Create() {
 
         <label>
           <span>Category:</span>
-          <Select options={categories} onChange={(option) => setCategory(option.value)} />
+          <Select
+            options={categories}
+            onChange={(option) => setCategory(option ? option.value : "")}
+          />
         </label>
 
         <label>
           <span>Assign To:</span>
           <Select
             options={userOptions}
-            onChange={(option) => setAssignedUsers(option)}
+            onChange={(option) => setAssignedUsers([...option])}
             isMulti={true}
           />
         </label>
