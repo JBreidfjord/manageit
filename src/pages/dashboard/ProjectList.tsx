@@ -2,8 +2,13 @@ import "./ProjectList.css";
 
 import Avatar from "../../components/Avatar";
 import { Link } from "react-router-dom";
+import { Project } from "../../types";
 
-export default function ProjectList({ projects }) {
+type Props = {
+  projects: Project[];
+};
+
+export default function ProjectList({ projects }: Props) {
   return (
     <div className="project-list">
       {projects.length === 0 ? (

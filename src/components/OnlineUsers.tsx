@@ -1,10 +1,11 @@
 import "./OnlineUsers.css";
 
-import Avatar from "../components/Avatar";
+import Avatar from "./Avatar";
 import { useCollection } from "../hooks/useCollection";
+import { UserCollection } from "../types";
 
 export default function OnlineUsers() {
-  const { documents: users, error } = useCollection("users");
+  const { documents: users, error }: UserCollection = useCollection("users");
 
   return (
     <div className="user-list">

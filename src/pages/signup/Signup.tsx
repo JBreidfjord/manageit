@@ -1,7 +1,7 @@
 import "./Signup.css";
 
 import { useSignup } from "../../hooks/useSignup";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -11,12 +11,12 @@ export default function Signup() {
   const [avatarError, setAvatarError] = useState(null);
   const { signup, isPending, error } = useSignup();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signup(displayName, email, password, avatar);
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAvatar(null);
 
     let selected = e.target.files[0];

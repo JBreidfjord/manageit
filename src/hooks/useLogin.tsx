@@ -9,7 +9,7 @@ export const useLogin = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string) => {
     setIsPending(true);
     setError(null);
 

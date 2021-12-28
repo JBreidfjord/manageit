@@ -1,6 +1,11 @@
 const filterList = ["All", "Assigned to Me", "Development", "Design", "Marketing", "Sales"];
 
-export default function ProjectFilter({ currentFilter, changeFilter }) {
+type Props = {
+  currentFilter: string;
+  changeFilter: (filter: string) => void;
+};
+
+export default function ProjectFilter({ currentFilter, changeFilter }: Props) {
   return (
     <div className="project-filter">
       <nav>

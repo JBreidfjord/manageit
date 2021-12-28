@@ -4,13 +4,18 @@ import { timestamp } from "../../firebase/config";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useState } from "react";
+import { Project } from "../../types";
 
-export default function ProjectComments({ project }) {
+type Props = {
+  project: Project;
+};
+
+export default function ProjectComments({ project }: Props) {
   const [newComment, setNewComment] = useState("");
   const { user } = useAuthContext();
   const { updateDocument, response } = useFirestore("projects");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const commentToAdd = {

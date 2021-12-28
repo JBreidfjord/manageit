@@ -8,6 +8,11 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useNavigate } from "react-router-dom";
+import { UserCollection, Project, FirestoreUser } from "../../types";
+
+interface AssignedUser {
+  value: FirestoreUser;
+}
 
 const categories = [
   { value: "Development", label: "Development" },
@@ -21,17 +26,17 @@ export default function Create() {
   const [details, setDetails] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [category, setCategory] = useState("");
-  const [assignedUsers, setAssignedUsers] = useState([]);
+  const [assignedUsers, setAssignedUsers] = useState(null);
   const [formError, setFormError] = useState("");
   const [userOptions, setUserOptions] = useState([]);
 
   const navigate = useNavigate();
 
-  const { documents: users } = useCollection("users");
+  const { documents: users }: UserCollection = useCollection("users");
   const { user } = useAuthContext();
   const { addDocument, response } = useFirestore("projects");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormError("");
 
@@ -40,12 +45,12 @@ export default function Create() {
     } else if (assignedUsers.length === 0) {
       setFormError("Please assign at least 1 user");
     } else {
-      const assignedUsersList = assignedUsers.map((assignedUser) => ({
+      const assignedUsersList = assignedUsers.map((assignedUser: AssignedUser) => ({
         displayName: assignedUser.value.displayName,
         photoURL: assignedUser.value.photoURL,
         id: assignedUser.value.id,
       }));
-      const project = {
+      const project: Project = {
         name,
         details,
         category: category,

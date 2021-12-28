@@ -1,14 +1,26 @@
 import { db, timestamp } from "../firebase/config";
 import { useEffect, useReducer, useState } from "react";
 
-let initialState = {
+interface State {
+  document: {};
+  isPending: boolean;
+  error: string;
+  success: boolean;
+}
+
+interface Action {
+  type: string;
+  payload?: any;
+}
+
+let initialState: State = {
   document: null,
   isPending: false,
   error: null,
   success: null,
 };
 
-const firestoreReducer = (state, action) => {
+const firestoreReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "PENDING":
       return { isPending: true, document: null, success: null, error: null };
@@ -25,19 +37,19 @@ const firestoreReducer = (state, action) => {
   }
 };
 
-export const useFirestore = (collection) => {
+export const useFirestore = (collection: string) => {
   const [response, dispatch] = useReducer(firestoreReducer, initialState);
   const [isCancelled, setIsCancelled] = useState(false);
 
   const ref = db.collection(collection);
 
-  const dispatchIfNotCancelled = (action) => {
+  const dispatchIfNotCancelled = (action: Action) => {
     if (!isCancelled) {
       dispatch(action);
     }
   };
 
-  const addDocument = async (doc) => {
+  const addDocument = async (doc: {}) => {
     dispatchIfNotCancelled({ type: "PENDING" });
 
     try {
@@ -49,7 +61,7 @@ export const useFirestore = (collection) => {
     }
   };
 
-  const deleteDocument = async (id) => {
+  const deleteDocument = async (id: string) => {
     dispatchIfNotCancelled({ type: "PENDING" });
 
     try {
@@ -60,7 +72,7 @@ export const useFirestore = (collection) => {
     }
   };
 
-  const updateDocument = async (id, updates) => {
+  const updateDocument = async (id: string, updates: {}) => {
     dispatchIfNotCancelled({ type: "PENDING" });
 
     try {

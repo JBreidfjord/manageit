@@ -9,7 +9,7 @@ export const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const signup = async (displayName, email, password, avatar) => {
+  const signup = async (displayName: string, email: string, password: string, avatar: File) => {
     setIsPending(true);
     setError(null);
 
