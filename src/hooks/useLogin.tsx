@@ -16,13 +16,17 @@ export const useLogin = () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password);
 
-      await db.collection("users").doc(res.user.uid).update({ online: true });
+      if (!res.user) {
+        throw new Error("No user returned");
+      } else {
+        await db.collection("users").doc(res.user.uid).update({ online: true });
 
-      await dispatch({ type: "LOGIN", payload: res.user });
-      if (!isCancelled) {
-        setIsPending(false);
+        dispatch({ type: "LOGIN", payload: res.user });
+        if (!isCancelled) {
+          setIsPending(false);
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
       if (!isCancelled) {
         setError(err.message);
         setIsPending(false);

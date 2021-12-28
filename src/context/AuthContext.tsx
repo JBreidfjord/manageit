@@ -1,7 +1,12 @@
 import { createContext, useEffect, useReducer } from "react";
 
 import { auth } from "../firebase/config";
-import { User } from "../types";
+
+interface User {
+  uid: string;
+  displayName: string;
+  photoURL: string;
+}
 
 export interface AuthContextType {
   user: User;

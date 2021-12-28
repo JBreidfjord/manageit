@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { db } from "../firebase/config";
 
-export const useCollection = (collection: string) => {
-  const [documents, setDocuments] = useState(null as any);
+export const useCollection = <T extends { id: string }>(collection: string) => {
+  const [documents, setDocuments] = useState<T[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -11,9 +11,9 @@ export const useCollection = (collection: string) => {
 
     const unsub = ref.onSnapshot(
       (snapshot) => {
-        let results: {}[] = [];
+        let results: Array<T> = [];
         snapshot.docs.forEach((doc) => {
-          results.push({ ...doc.data(), id: doc.id });
+          results.push({ ...doc.data(), id: doc.id } as T);
         });
         setDocuments(results);
         setError("");

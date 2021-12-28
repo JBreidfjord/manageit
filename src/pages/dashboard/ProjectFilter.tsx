@@ -13,7 +13,7 @@ export default function ProjectFilter({ currentFilter, changeFilter }: Props) {
           <button
             key={filter}
             onClick={() => changeFilter(filter)}
-            className={currentFilter === filter ? "active" : null}
+            className={currentFilter === filter ? "active" : ""}
           >
             {filter}
           </button>

@@ -2,10 +2,10 @@ import "./OnlineUsers.css";
 
 import Avatar from "./Avatar";
 import { useCollection } from "../hooks/useCollection";
-import { UserCollection } from "../types";
+import { User } from "../types";
 
 export default function OnlineUsers() {
-  const { documents: users, error }: UserCollection = useCollection("users");
+  const { documents: users, error } = useCollection<User>("users");
 
   return (
     <div className="user-list">

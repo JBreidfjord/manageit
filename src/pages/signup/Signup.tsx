@@ -7,8 +7,8 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [avatar, setAvatar] = useState(null);
-  const [avatarError, setAvatarError] = useState(null);
+  const [avatar, setAvatar] = useState(null as unknown as File);
+  const [avatarError, setAvatarError] = useState("");
   const { signup, isPending, error } = useSignup();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,19 +17,21 @@ export default function Signup() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAvatar(null);
+    setAvatar(null as unknown as File);
 
-    let selected = e.target.files[0];
+    if (e.target.files) {
+      let selected = e.target.files[0];
 
-    if (!selected) {
-      setAvatarError("Please select a file");
-    } else if (!selected.type.includes("image")) {
-      setAvatarError("File must be an image");
-    } else if (selected.size > 1000000) {
-      setAvatarError("File size exceeds 1MB");
+      if (!selected.type.includes("image")) {
+        setAvatarError("File must be an image");
+      } else if (selected.size > 1000000) {
+        setAvatarError("File size exceeds 1MB");
+      } else {
+        setAvatarError("");
+        setAvatar(selected);
+      }
     } else {
-      setAvatarError(null);
-      setAvatar(selected);
+      setAvatarError("Please select a file");
     }
   };
 

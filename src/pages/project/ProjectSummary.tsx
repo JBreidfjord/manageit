@@ -2,10 +2,10 @@ import Avatar from "../../components/Avatar";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useNavigate } from "react-router-dom";
-import { Project } from "../../types";
+import { ProjectType } from "../../types";
 
 type Props = {
-  project: Project;
+  project: ProjectType;
 };
 
 export default function ProjectSummary({ project }: Props) {

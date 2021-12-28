@@ -8,10 +8,15 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useNavigate } from "react-router-dom";
-import { UserCollection, Project, FirestoreUser } from "../../types";
+import { CreateProject, User } from "../../types";
 
 interface AssignedUser {
-  value: FirestoreUser;
+  value: User;
+}
+
+interface UserOption {
+  value: User;
+  label: string;
 }
 
 const categories = [
@@ -26,13 +31,13 @@ export default function Create() {
   const [details, setDetails] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [category, setCategory] = useState("");
-  const [assignedUsers, setAssignedUsers] = useState(null);
+  const [assignedUsers, setAssignedUsers] = useState([] as AssignedUser[]);
   const [formError, setFormError] = useState("");
-  const [userOptions, setUserOptions] = useState([]);
+  const [userOptions, setUserOptions] = useState([] as UserOption[]);
 
   const navigate = useNavigate();
 
-  const { documents: users }: UserCollection = useCollection("users");
+  const { documents: users } = useCollection<User>("users");
   const { user } = useAuthContext();
   const { addDocument, response } = useFirestore("projects");
 
@@ -50,7 +55,7 @@ export default function Create() {
         photoURL: assignedUser.value.photoURL,
         id: assignedUser.value.id,
       }));
-      const project: Project = {
+      const project: CreateProject = {
         name,
         details,
         category: category,
@@ -102,14 +107,17 @@ export default function Create() {
 
         <label>
           <span>Category:</span>
-          <Select options={categories} onChange={(option) => setCategory(option.value)} />
+          <Select
+            options={categories}
+            onChange={(option) => setCategory(option ? option.value : "")}
+          />
         </label>
 
         <label>
           <span>Assign To:</span>
           <Select
             options={userOptions}
-            onChange={(option) => setAssignedUsers(option)}
+            onChange={(option) => setAssignedUsers([...option])}
             isMulti={true}
           />
         </label>

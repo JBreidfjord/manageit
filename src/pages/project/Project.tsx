@@ -4,10 +4,14 @@ import ProjectComments from "./ProjectComments";
 import ProjectSummary from "./ProjectSummary";
 import { useDocument } from "../../hooks/useDocument";
 import { useParams } from "react-router-dom";
+import { ProjectType } from "../../types";
 
 export default function Project() {
-  const { id } = useParams();
-  const { document: project, error } = useDocument("projects", id);
+  let { id } = useParams();
+  if (id === undefined) {
+    id = "";
+  }
+  const { document: project, error } = useDocument<ProjectType>("projects", id);
 
   return (
     <div>

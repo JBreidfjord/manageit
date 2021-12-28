@@ -5,11 +5,11 @@ import ProjectList from "./ProjectList";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import { useState } from "react";
-import { ProjectCollection } from "../../types";
+import { ProjectType } from "../../types";
 
 export default function Dashboard() {
   const [currentFilter, setCurrentFilter] = useState("All");
-  const { documents: projects, error }: ProjectCollection = useCollection("projects");
+  const { documents: projects, error } = useCollection<ProjectType>("projects");
   const { user } = useAuthContext();
 
   const changeFilter = (newFilter: string) => {

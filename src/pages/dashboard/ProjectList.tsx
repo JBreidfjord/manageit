@@ -2,10 +2,10 @@ import "./ProjectList.css";
 
 import Avatar from "../../components/Avatar";
 import { Link } from "react-router-dom";
-import { Project } from "../../types";
+import { ProjectType } from "../../types";
 
 type Props = {
-  projects: Project[];
+  projects: ProjectType[];
 };
 
 export default function ProjectList({ projects }: Props) {

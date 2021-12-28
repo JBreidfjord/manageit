@@ -4,10 +4,10 @@ import { timestamp } from "../../firebase/config";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useState } from "react";
-import { Project } from "../../types";
+import { ProjectType } from "../../types";
 
 type Props = {
-  project: Project;
+  project: ProjectType;
 };
 
 export default function ProjectComments({ project }: Props) {
